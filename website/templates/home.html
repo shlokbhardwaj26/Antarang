@@ -1,0 +1,140 @@
+{% extends "base.html" %} {% block title %}Antarang: Where AI meets Empathy{% endblock %} {% block content %}
+
+    <style>
+        
+        /* Style for the square shape */
+        .shape {
+            position: absolute; /* Position the shape relative to the viewport */
+            top: 17%; /* Adjust the distance from the top of the viewport */
+            left: 40px; /* Adjust the distance from the left side of the viewport */
+            width: 700px; /* Adjust the width of the shape */
+            height: 570px; /* Adjust the height of the shape */
+            background-color: rgba(0, 0, 0, 0.3); /* Background color with opacity (RGBA) */
+            border-radius: 20px; /* Rounded corners */
+            display: flex; /* Use flexbox for easy centering */
+            flex-direction: column; /* Arrange child elements vertically */
+            padding: 20px; /* Add padding for inner content */
+        }
+
+        /* Style for the text inside the square shape */
+        .shape p {
+            color: #FFFFFF; /* Text color */
+            font-size: 40px; /* Font size */
+            font-weight: bold; /* Bold text */
+            font-family: Arial Black, sans-serif; /* Font family */
+            text-align: center; /* Center-align the text */
+            margin-top: 40px; /* Add top margin for spacing */
+            line-height: 1; /* Ensure single line */
+        }
+
+        /* Style for the input field */
+        .input-field {
+            width: 30%; /* Full width */
+            height: 10%;
+            padding: 10px; /* Add padding */
+            border: none; /* Remove default border */
+            border-radius: 30px; /* Rounded corners */
+            background-color: #FFFFFF; /* White background */
+            font-size: 20px; /* Font size */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            margin: 80px auto 20px; /* Adjust vertical margin */
+            text-align: center; /* Center-align the text */
+        }
+
+        /* Style for the webcam window */
+        #webcam {
+            position: absolute;
+            top: 17%;
+            right: 40px; /* Adjusted to align to the right */
+            width: 700px; /* Same width as the opaque square */
+            height: 520px; /* Same height as the opaque square */
+            overflow: hidden;
+        }
+
+        /* Style for the video element */
+        #video {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Style for the capture button */
+        #captureButton {
+            width: 30%; /* Same width as the input field */
+            padding: 10px; /* Add padding */
+            border: none; /* Remove default border */
+            border-radius: 30px; /* Rounded corners */
+            background-color:  #002257; /* Green background color */
+            color: white; /* White text color */
+            font-size: 20px; /* Font size */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            margin: 0 auto; /* Center the button horizontally */
+            cursor: pointer;
+            text-align: center; /* Center-align the text */
+        }
+
+        /* Style for the message */
+        #message {
+            color: #FFFFFF; /* Text color */
+            font-size: 20px; /* Font size */
+            font-family: Arial black, sans-serif; /* Font family */
+            text-align: center; /* Center-align the text */
+            margin-top: 20px; /* Add top margin for spacing */
+        }
+    </style>
+<body> 
+
+    <div class="shape">
+        <p>Let's see how you feel today.</p>
+        <input type="text" class="input-field" id="userAgeInput" placeholder="Enter your age here">
+        <button id="captureButton" class="capturePic">Capture Image</button>
+        <div id="message"></div>
+    </div>
+
+    <div id="webcam">
+        <video id="video" autoplay></video>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const captureButton = document.getElementById('captureButton');
+        const message = document.getElementById('message');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+            })
+            .catch(function(err) {
+                console.log('Error accessing webcam:', err);
+            });
+
+        captureButton.addEventListener('click', function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const dataURL = canvas.toDataURL('image/jpeg');
+            console.log('Captured image:', dataURL);
+            message.textContent = 'Image captured successfully!';
+            message.textContent
+
+            // Send the captured image to the Flask backend
+            fetch('/upload', {
+                method: 'POST',
+                body: JSON.stringify({ image: dataURL }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response from Flask:', data);
+                // Handle the response from Flask as needed
+                message.textContent=data.message;
+            })
+            .catch(error => {
+                console.error('Error sending image to Flask:', error);
+            });
+        });
+    </script>
+    {% endblock %}

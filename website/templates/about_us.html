@@ -1,0 +1,84 @@
+{% extends "base.html" %} {% block title %}About Antarang{% endblock %} {% block content %}
+
+    <style>
+        
+        .about {
+            color:white;
+            font-size:20px;
+            position:fixed;
+            text-align:left;
+            top:350px;
+            text-align:left;
+            left:140px;
+            right:50%;
+        }
+        .get-started-btn {
+            background-color: #002257; /* Set background color for the button */
+            color: white; /* Set text color for the button */
+            padding: 15px 30px; /* Add padding to the button */
+            border-radius: 30px; /* Round the corners of the button */
+            text-align: center; /* Center-align text within the button */
+            position: fixed; /* Position the button */
+            left: 140px; /* Position the button horizontally centered */
+            cursor: pointer; /* Add cursor pointer on hover */
+            bottom: 35px;
+            font-size: 20px;
+        }
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        
+        .Antarang {
+            color: white;
+            font-size: 70px;
+            font-weight: bold;
+            text-align: left;
+            position: fixed;
+            top: 150px;
+            left: 140px; /* Adjust the initial position as needed */
+            animation: slideInFromLeft 1.5s ease forwards;
+        }
+        
+        .tagline {
+            color: white;
+            font-size: 30px;
+            position: fixed;
+            text-align: left;
+            top: 230px;
+            left: 140px; /* Adjust the initial position as needed */
+            animation: slideInFromLeft 1.5s ease forwards;
+        }
+        
+        @keyframes slideBackground {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="about">
+        <p>Welcome to Antarang! We're all about making technology understand your feelings. Our goal is to create a digital world that cares about how you feel. Whether you're happy, sad, or somewhere in between, we want to offer you personalized support whenever you need it. With a focus on empathy and understanding, our team is dedicated to building innovative solutions that prioritize your emotional well-being. And don't worry, your privacy is important to us. We take every precaution to ensure your personal information is safe and secure. Join us on our journey to make the internet a friendlier and more compassionate place at Antarang!</p>
+        <!-- Get Started button -->
+        <button class="get-started-btn">Get Started</button>
+        <a href="/" class="get-started-btn">Get Started</a>
+
+    </div>
+    <!-- Text outside the main container -->
+    <div class="Antarang">
+        ANTARANG
+    </div>
+    <div class="tagline">
+        Where Empathy Meets AI
+    </div>
+    {% endblock %}
+</body>
+</html>
